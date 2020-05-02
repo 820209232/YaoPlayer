@@ -2,6 +2,9 @@
 
 class YaoAVPacketPrivate;
 class YaoAVReaderPrivate;
+class YaoAVStreamPrivate;
+class YaoAVDecodePrivate;
+class YaoAVFramePrivate;
 
 class YaoAVPacket
 {
@@ -12,6 +15,15 @@ public:
 	YaoAVPacketPrivate * packetPrivate = nullptr;
 };
 
+class YaoAVStream
+{
+public:
+	YaoAVStream();
+	~YaoAVStream();
+public:
+	YaoAVStreamPrivate* imp = nullptr;
+
+};
 
 class YaoAVReader
 {
@@ -27,13 +39,26 @@ private:
 	YaoAVReaderPrivate * formatContextPrivate = nullptr;
 };
 
-//class Decoder
-//{
-//public:
-//	AVCodecContext* codecContext = nullptr;
-//public:
-//	Decoder();
-//	~Decoder();
-//
-//	int init(AVStream * stream);
-//};
+class YaoAVFrame
+{
+public:
+	YaoAVFrame();
+	~YaoAVFrame();
+public:
+	YaoAVFramePrivate* imp = nullptr;
+};
+
+class Decoder
+{
+public:
+	YaoAVDecodePrivate* imp = nullptr;
+public:
+	Decoder();
+	~Decoder();
+
+	int init(YaoAVStream* stream);
+	int sendPacket(YaoAVPacket * packet);
+	int receiveFrame(YaoAVFrame * frame);
+	int close();
+};
+
