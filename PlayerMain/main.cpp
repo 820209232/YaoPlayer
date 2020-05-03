@@ -4,6 +4,7 @@
 #include "YaoPlayer/YaoDecode.h"
 #include "YaoThread/YaoThread.h"
 #include "YaoAV/YaoAV.h"
+#include "YaoQueue/Queue.h"
 
 class MyThread : public YaoThread
 {
@@ -32,6 +33,7 @@ int main_thread()
 
 int main()
 {
+	YaoQueue<YaoAVPacket> packetQueue;
 	YaoAVReader reader;
 	FILE* fout;
 	fout = fopen("C://video/the5MP4.yuv", "wb");
@@ -61,16 +63,18 @@ int main()
 
 	while (1)
 	{
-		YaoAVPacket packet;
-		ret = reader.Read(&packet);
+		YaoAVPacket * packet = new YaoAVPacket();
+		ret = reader.Read(packet);
 		if (ret) {
 			break;
 		}
 
-		int packetIndex = packet.getIndex();
+		packetQueue.push(packet);
+
+		int packetIndex = packet->getIndex();
 		Decoder* decoder = DecoderList[packetIndex];
 
-		ret = decoder->sendPacket(&packet);
+		ret = decoder->sendPacket(packet);
 		if (ret) {
 			continue;
 		}
@@ -111,7 +115,7 @@ int main()
 			}
 
 			if (packetIndex == audioStreamIndex) {
-				frame.audioPrint();
+				//frame.audioPrint();
 			}
 		}
 
@@ -128,6 +132,18 @@ int main()
 			}
 
 			//receive success
+		}
+	}
+
+	//for (int i = 0; i < packetQueue.queueSize(); i++) {
+	while (packetQueue.queueSize() > 0){
+		YaoAVPacket* packet = nullptr;
+		packetQueue.pop(&packet);
+
+		printf("packetQueue size:%d \n", packetQueue.queueSize());
+
+		if (packet != nullptr) {
+			delete packet;
 		}
 	}
 
