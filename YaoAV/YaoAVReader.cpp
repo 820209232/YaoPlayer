@@ -1,6 +1,7 @@
 #include "YaoAV.h"
 #include "YaoAVReaderPrivate.h"
 #include "YaoAVPacketPrivate.h"
+#include "YaoAVStreamPrivate.h"
 
 YaoAVReader::YaoAVReader()
 {
@@ -46,4 +47,25 @@ int YaoAVReader::Read(YaoAVPacket* packet)
 	}
 	int ret = av_read_frame(formatContextPrivate->formatContext, packet->packetPrivate->packet);
 	return ret;
+}
+
+int YaoAVReader::getStreamCount()
+{
+	return formatContextPrivate->formatContext->nb_streams;
+}
+int YaoAVReader::getStream(YaoAVStream* yaoStream, int streamIndex)
+{
+	AVStream * avStream = formatContextPrivate->formatContext->streams[streamIndex];
+	yaoStream->streamIndex = avStream->index;
+	return avcodec_parameters_copy(yaoStream->imp->codecpar, avStream->codecpar);
+}
+
+int  YaoAVReader::getVideoStreamIndex()
+{
+	return av_find_best_stream(formatContextPrivate->formatContext, AVMediaType::AVMEDIA_TYPE_VIDEO, -1, -1, NULL, NULL);
+}
+
+int  YaoAVReader::getAudioStreamIndex()
+{
+	return av_find_best_stream(formatContextPrivate->formatContext, AVMediaType::AVMEDIA_TYPE_AUDIO, -1, -1, NULL, NULL);
 }

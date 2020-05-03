@@ -5,6 +5,7 @@ class YaoAVReaderPrivate;
 class YaoAVStreamPrivate;
 class YaoAVDecodePrivate;
 class YaoAVFramePrivate;
+class YaoAVStream;
 
 class YaoAVPacket
 {
@@ -13,16 +14,23 @@ public:
 	~YaoAVPacket();
 public:
 	YaoAVPacketPrivate * packetPrivate = nullptr;
+	int getIndex();
 };
 
-class YaoAVStream
+class YaoAVFrame
 {
 public:
-	YaoAVStream();
-	~YaoAVStream();
+	YaoAVFrame();
+	~YaoAVFrame();
+	int videoPrint();
+	int audioPrint();
+	int getW();
+	int getH();
+	int getY(unsigned char * y);
+	int getU(unsigned char * u);
+	int getV(unsigned char * v);
 public:
-	YaoAVStreamPrivate* imp = nullptr;
-
+	YaoAVFramePrivate* imp = nullptr;
 };
 
 class YaoAVReader
@@ -34,18 +42,24 @@ public:
 	int Open(const char * path);
 	int Close();
 	int Read(YaoAVPacket * packet);
+	int getStreamCount();
+	int getStream(YaoAVStream * stream, int streamIndex);
 
+	int getVideoStreamIndex();
+	int getAudioStreamIndex();
 private:
 	YaoAVReaderPrivate * formatContextPrivate = nullptr;
 };
 
-class YaoAVFrame
+class YaoAVStream
 {
 public:
-	YaoAVFrame();
-	~YaoAVFrame();
+	YaoAVStream();
+	~YaoAVStream();
 public:
-	YaoAVFramePrivate* imp = nullptr;
+	YaoAVStreamPrivate* imp = nullptr;
+	int streamIndex = -1;
+
 };
 
 class Decoder

@@ -9,6 +9,7 @@ add_library(
 	YaoAVPacket.cpp
 	YaoAVDecode.cpp
 	YaoAVStream.cpp
+	YaoAVFrame.cpp
 )
 
 

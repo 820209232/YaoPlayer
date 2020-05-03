@@ -13,3 +13,8 @@ YaoAVPacket::~YaoAVPacket()
 		packetPrivate->packet = nullptr;
 	}
 }
+
+int YaoAVPacket::getIndex()
+{
+	return packetPrivate->packet->stream_index;
+}

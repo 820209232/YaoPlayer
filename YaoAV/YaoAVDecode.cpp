@@ -26,7 +26,7 @@ int Decoder::init(YaoAVStream* stream)
 	AVCodec * codec = avcodec_find_decoder(imp->codecContext->codec_id);
 	int ret = avcodec_open2(imp->codecContext, codec, nullptr);
 	if (ret) {
-		printf("Open Decoder Fail\n");
+		printf("Open Decoder Fail:%d\n", ret);
 		return -1;
 	}
 	return 0;
@@ -43,10 +43,12 @@ int Decoder::sendPacket(YaoAVPacket* packet)
 	}
 	return ret;
 }
+
 int Decoder::receiveFrame(YaoAVFrame* frame)
 {
 	return avcodec_receive_frame(imp->codecContext, frame->imp->frame);
 }
+
 int Decoder::close()
 {
 	return avcodec_close(imp->codecContext);
