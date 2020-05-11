@@ -22,6 +22,8 @@ Decoder::~Decoder()
 
 int Decoder::init(YaoAVStream* stream)
 {
+	timebaseDen = stream->timebaseDen;
+	timebaseNum = stream->timebaseNum;
 	avcodec_parameters_to_context(imp->codecContext, stream->imp->codecpar);
 	AVCodec * codec = avcodec_find_decoder(imp->codecContext->codec_id);
 	int ret = avcodec_open2(imp->codecContext, codec, nullptr);
@@ -46,7 +48,12 @@ int Decoder::sendPacket(YaoAVPacket* packet)
 
 int Decoder::receiveFrame(YaoAVFrame* frame)
 {
-	return avcodec_receive_frame(imp->codecContext, frame->imp->frame);
+	int ret = avcodec_receive_frame(imp->codecContext, frame->imp->frame);
+	if (!ret) {
+		//将秒级时间戳计算
+		frame->imp->pts_sec = frame->imp->frame->pts * 1.0 * timebaseNum / timebaseDen;
+	}
+	return ret;
 }
 
 int Decoder::close()

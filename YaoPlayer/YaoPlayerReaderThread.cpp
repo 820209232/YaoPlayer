@@ -1,13 +1,13 @@
 #include "YaoPlayer.h"
 #include "YaoAV/YaoAV.h"
 
-YaoPlayerReaderThread::YaoPlayerReaderThread(std::string _path)
+YaoPlayerReaderThread::YaoPlayerReaderThread(std::string _path, YaoPlayerCtr* _ctrThread)
 {
 	path = _path;
+	ctrThread = _ctrThread;
 }
 YaoPlayerReaderThread::~YaoPlayerReaderThread()
 {
-
 }
 void YaoPlayerReaderThread::run()
 {
@@ -21,8 +21,8 @@ void YaoPlayerReaderThread::run()
 	int audioStreamIndex = reader.getAudioStreamIndex();
 
 	//TODO初始化解码器
-	YaoDecodeThread* videoDecodeThread = new  YaoDecodeThread();
-	YaoDecodeThread* audioDecodeThread = new  YaoDecodeThread();
+	YaoDecodeThread* videoDecodeThread = new  YaoDecodeThread(ctrThread, YaoDecoderType::YAODECODER_TYPE_VIDEO);
+	YaoDecodeThread* audioDecodeThread = new  YaoDecodeThread(ctrThread, YaoDecoderType::YAODECODER_TYPE_AUDIO);
 
 	YaoAVStream videoStream;
 	reader.getStream(&videoStream, videoStreamIndex);
@@ -56,7 +56,7 @@ void YaoPlayerReaderThread::run()
 			audioDecodeThread->pushPacket(pkt);
 		}
 		//将packet放入缓存
-		printf("get packet\n");
+		//printf("get packet\n");
 
 	}
 

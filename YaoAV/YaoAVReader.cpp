@@ -57,6 +57,8 @@ int YaoAVReader::getStream(YaoAVStream* yaoStream, int streamIndex)
 {
 	AVStream * avStream = formatContextPrivate->formatContext->streams[streamIndex];
 	yaoStream->streamIndex = avStream->index;
+	yaoStream->timebaseDen = avStream->time_base.den;
+	yaoStream->timebaseNum = avStream->time_base.num;
 	return avcodec_parameters_copy(yaoStream->imp->codecpar, avStream->codecpar);
 }
 

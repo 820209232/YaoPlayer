@@ -100,3 +100,8 @@ int YaoAVFrame::getV(unsigned char* v)
 	}
 	return 0;
 }
+
+long long YaoAVFrame::getPts()
+{
+	return (long long)(imp->pts_sec * 1000);
+}

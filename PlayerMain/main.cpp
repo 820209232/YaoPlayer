@@ -9,7 +9,7 @@ int main()
 		return -1;
 	}
 
-	Sleep(1000 * 10);
+	Sleep(1000 * 20);
 
 	player.play();
 

@@ -6,20 +6,45 @@
 #include "YaoAV/YaoAV.h"
 #include "YaoQueue/Queue.h"
 
+enum YaoDecoderType
+{
+	YAODECODER_TYPE_VIDEO = 0,
+	YAODECODER_TYPE_AUDIO = 1
+};
+
+class YaoPlayerCtr : public YaoThread
+{
+public:
+	YaoPlayerCtr();
+	~YaoPlayerCtr();
+
+	virtual void run();
+
+	int pushVideoFrameQueue(YaoAVFrame* avFrame);
+	int pushAudioFrameQueue(YaoAVFrame* avframe);
+	int getVideoFrameQueueSize();
+	int getAudioFrameQueueSize();
+private:
+	YaoQueue<YaoAVFrame> videoFrameQueue;
+	YaoQueue<YaoAVFrame> audioFrameQueue;
+
+};
+
 class YaoPlayerReaderThread : public YaoThread
 {
 public:
-	YaoPlayerReaderThread(std::string _path);
+	YaoPlayerReaderThread(std::string _path, YaoPlayerCtr * ctr);
 	~YaoPlayerReaderThread();
 	virtual void run();
 private:
 	std::string path;
+	YaoPlayerCtr * ctrThread = nullptr;
 };
 
 class YaoDecodeThread : public YaoThread
 {
 public:
-	YaoDecodeThread();
+	YaoDecodeThread(YaoPlayerCtr * ctr, YaoDecoderType type);
 	~YaoDecodeThread();
 	virtual void run();
 	int init(YaoAVStream* stream);
@@ -28,6 +53,8 @@ public:
 private:
 	Decoder * decode = nullptr;
 	YaoQueue<YaoAVPacket> packetQueue;
+	YaoPlayerCtr * ctrThread = nullptr;
+	YaoDecoderType type;
 };
 
 class YaoPlayer
@@ -44,6 +71,6 @@ public:
 	int seek(double time);
 private:
 	std::string path;
-	YaoPlayerReaderThread * readerThread = nullptr;
+	YaoPlayerCtr * playerCtr = nullptr;
 };
 

@@ -29,6 +29,8 @@ public:
 	int getY(unsigned char * y);
 	int getU(unsigned char * u);
 	int getV(unsigned char * v);
+
+	long long getPts();
 public:
 	YaoAVFramePrivate* imp = nullptr;
 };
@@ -59,13 +61,16 @@ public:
 public:
 	YaoAVStreamPrivate* imp = nullptr;
 	int streamIndex = -1;
-
+	int timebaseDen = -1;
+	int timebaseNum = -1;
 };
 
 class Decoder
 {
 public:
 	YaoAVDecodePrivate* imp = nullptr;
+	int timebaseDen = -1;
+	int timebaseNum = -1;
 public:
 	Decoder();
 	~Decoder();
@@ -74,5 +79,11 @@ public:
 	int sendPacket(YaoAVPacket * packet);
 	int receiveFrame(YaoAVFrame * frame);
 	int close();
+};
+
+class YaoTime
+{
+public:
+	static long long getTime();
 };
 

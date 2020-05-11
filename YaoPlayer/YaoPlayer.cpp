@@ -12,9 +12,9 @@ YaoPlayer::~YaoPlayer()
 
 int YaoPlayer::open()
 {
-	if (readerThread == nullptr) {
-		readerThread = new YaoPlayerReaderThread(path);
-		readerThread->start();
+	if (playerCtr == nullptr) {
+		playerCtr = new YaoPlayerCtr();
+		playerCtr->start();
 		return 0;
 	}
 	return -1;
@@ -22,8 +22,10 @@ int YaoPlayer::open()
 
 int YaoPlayer::stop()
 {
-	if (readerThread != nullptr) {
-		readerThread->stop();
+	if (playerCtr != nullptr) {
+		playerCtr->stop();
+		delete playerCtr;
+		playerCtr = nullptr;
 	}
 	return 0;
 }

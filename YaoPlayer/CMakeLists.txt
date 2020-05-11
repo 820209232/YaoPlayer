@@ -7,6 +7,7 @@ add_library(
     YaoPlayer.cpp
     YaoPlayerReaderThread.cpp
     YaoDecodeThread.cpp
+    YaoPlayerCtr.cpp
 )
 
 target_link_libraries(YaoPlayer YaoPlayer)

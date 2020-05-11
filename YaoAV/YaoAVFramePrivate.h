@@ -7,4 +7,5 @@ extern "C"
 class YaoAVFramePrivate {
 public:
 	AVFrame* frame = nullptr;
+	double pts_sec = 0.0;
 };
