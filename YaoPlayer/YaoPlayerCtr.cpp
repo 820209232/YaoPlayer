@@ -87,5 +87,5 @@ int YaoPlayerCtr::getVideoFrameQueueSize()
 
 int YaoPlayerCtr::getAudioFrameQueueSize()
 {
-	return videoFrameQueue.queueSize();
+	return audioFrameQueue.queueSize();
 }
