@@ -12,10 +12,16 @@ enum YaoDecoderType
 	YAODECODER_TYPE_AUDIO = 1
 };
 
+enum YaoPlayerStatus
+{
+	YAOPLAYERSTATUS_PLAYING = 0,
+	YAOPLAYERSTATUS_PAUSEING = 1
+};
+
 class YaoPlayerCtr : public YaoThread
 {
 public:
-	YaoPlayerCtr();
+	YaoPlayerCtr(double _time = 0.0);
 	~YaoPlayerCtr();
 
 	virtual void run();
@@ -24,10 +30,16 @@ public:
 	int pushAudioFrameQueue(YaoAVFrame* avframe);
 	int getVideoFrameQueueSize();
 	int getAudioFrameQueueSize();
+
+	int play();
+	int pause();
+
+public:
+	double seekTime = 0.0;
 private:
 	YaoQueue<YaoAVFrame> videoFrameQueue;
 	YaoQueue<YaoAVFrame> audioFrameQueue;
-
+	YaoPlayerStatus status = YaoPlayerStatus::YAOPLAYERSTATUS_PLAYING;
 };
 
 class YaoPlayerReaderThread : public YaoThread
@@ -63,7 +75,7 @@ public:
 	YaoPlayer(std::string path);
 	~YaoPlayer();
 
-	int open();
+	int open(double time = 0.0);
 	int stop();
 	int play();
 	int pause();

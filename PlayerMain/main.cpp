@@ -8,14 +8,17 @@ int main()
 		printf("file open fail\n");
 		return -1;
 	}
-
-	Sleep(1000 * 20);
-
 	player.play();
 
-	player.pause();
+	Sleep(1000 * 2);
+
+	player.seek(10);
+	/*player.pause();
+	Sleep(1000 * 2);*/
+
 
 	player.play();
+	Sleep(1000 * 5);
 
 	player.stop();
 

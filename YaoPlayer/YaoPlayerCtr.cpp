@@ -1,8 +1,8 @@
 #include "YaoPlayer.h"
 
-YaoPlayerCtr::YaoPlayerCtr()
+YaoPlayerCtr::YaoPlayerCtr(double _time)
 {
-
+	seekTime = _time;
 }
 
 YaoPlayerCtr::~YaoPlayerCtr()
@@ -19,19 +19,40 @@ void YaoPlayerCtr::run()
 	long long startTime = YaoTime::getTime();
 	YaoAVFrame* videoFrame = nullptr;
 	YaoAVFrame* audioFrame = nullptr;
+	long long pauseDurationAll = 0;
 	while (!stopFlag) {
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+		
+		long long pauseStart = YaoTime::getTime();
+		while (status == YaoPlayerStatus::YAOPLAYERSTATUS_PAUSEING)
+		{
+			std::this_thread::sleep_for(std::chrono::milliseconds(1));
+		}
+		long long pauseEnd = YaoTime::getTime();
+		long long pauseDuration = pauseEnd - pauseStart;
+		pauseDurationAll += pauseDuration;
+
 		//获取当前时间 nowTime
 		long long nowTime = YaoTime::getTime();
 		//获取当前时间和开始时间的差 dTime
 		long long dTime = nowTime - startTime;
+		dTime = dTime - pauseDurationAll;
+		dTime = dTime + (long long)(seekTime * 1000);
 		//printf("dTime:%lld\n", dTime);
-
+	
 		//-------视频
 		//从视频frame缓存队列中获取一帧视频 framePts
 		if (videoFrame == nullptr) {
 			videoFrameQueue.pop(&videoFrame);
 		} 
+
+		if (videoFrame != nullptr) {
+			//pts小于seektime，丢帧
+			if (videoFrame->getPts() < (long long)(seekTime * 1000)) {
+				delete videoFrame;
+				videoFrame = nullptr;
+			}
+		}
 		if (videoFrame != nullptr) {
 			//如果 framePts <= dTime
 			if (videoFrame->getPts() <= dTime) {
@@ -88,4 +109,16 @@ int YaoPlayerCtr::getVideoFrameQueueSize()
 int YaoPlayerCtr::getAudioFrameQueueSize()
 {
 	return audioFrameQueue.queueSize();
+}
+
+int YaoPlayerCtr::play()
+{
+	status = YaoPlayerStatus::YAOPLAYERSTATUS_PLAYING;
+	return 0;
+}
+
+int YaoPlayerCtr::pause()
+{
+	status = YaoPlayerStatus::YAOPLAYERSTATUS_PAUSEING;
+	return 0;
 }

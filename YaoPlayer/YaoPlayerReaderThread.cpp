@@ -17,6 +17,8 @@ void YaoPlayerReaderThread::run()
 		return;
 	}
 
+	reader.seek(ctrThread->seekTime);
+
 	int videoStreamIndex = reader.getVideoStreamIndex();
 	int audioStreamIndex = reader.getAudioStreamIndex();
 

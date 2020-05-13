@@ -10,10 +10,10 @@ YaoPlayer::~YaoPlayer()
 
 }
 
-int YaoPlayer::open()
+int YaoPlayer::open(double time)
 {
 	if (playerCtr == nullptr) {
-		playerCtr = new YaoPlayerCtr();
+		playerCtr = new YaoPlayerCtr(time);
 		playerCtr->start();
 		return 0;
 	}
@@ -32,15 +32,17 @@ int YaoPlayer::stop()
 
 int YaoPlayer::play()
 {
-	return 0;
+	return playerCtr->play();
 }
 
 int YaoPlayer::pause()
 {
-	return 0;
+	return playerCtr->pause();
 }
 
 int YaoPlayer::seek(double time)
 {
+	stop();
+	open(time);
 	return 0;
 }

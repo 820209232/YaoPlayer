@@ -49,6 +49,8 @@ public:
 
 	int getVideoStreamIndex();
 	int getAudioStreamIndex();
+
+	int seek(double time);
 private:
 	YaoAVReaderPrivate * formatContextPrivate = nullptr;
 };

@@ -71,3 +71,13 @@ int  YaoAVReader::getAudioStreamIndex()
 {
 	return av_find_best_stream(formatContextPrivate->formatContext, AVMediaType::AVMEDIA_TYPE_AUDIO, -1, -1, NULL, NULL);
 }
+
+int YaoAVReader::seek(double time)
+{
+	if (formatContextPrivate->formatContext == nullptr) {
+		return -1;
+	}
+	int64_t timestamp = (int64_t)(time * AV_TIME_BASE);
+	av_seek_frame(formatContextPrivate->formatContext, -1, timestamp, AVSEEK_FLAG_BACKWARD);
+	return 0;
+}
