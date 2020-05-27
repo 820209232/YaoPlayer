@@ -8,7 +8,7 @@ include_directories(../3rdpart/glfw/include/)
 
 add_executable(
     PlayerMain
-    "../YaoGL/mainGL.cpp"
+    mainGL.cpp
 )
 
 target_link_libraries(PlayerMain YaoPlayer)

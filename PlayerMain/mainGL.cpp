@@ -20,6 +20,12 @@ int main() {
     //初始化glad
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 
+    char* vertexShaderStr = (char*)"int main() {}";
+    char* fragmentShaderStr = (char*)"int main() {}";
+
+    YaoGLProgram* program = new  YaoGLProgram(vertexShaderStr, fragmentShaderStr);
+    
+
     while (!glfwWindowShouldClose(window)) {
         //todo 绘制操作
 
@@ -27,6 +33,7 @@ int main() {
         glfwPollEvents();
     }
 
+    delete program;
     glfwTerminate();
     return 0;
 }
