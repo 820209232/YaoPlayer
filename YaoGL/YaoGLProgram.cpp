@@ -13,10 +13,10 @@ YaoGLProgram::YaoGLProgram(char* vertexShaderStr, char* fragmentShaderStr)
 
 	GLint logLen = 0;
 	glGetProgramiv(program, GL_INFO_LOG_LENGTH, &logLen);
-	if (logLen > 0) {
+	if (logLen > 1) {
 		char* log = (char*)malloc(logLen);
 		glGetProgramInfoLog(program, logLen, NULL, log);
-		printf("program log:%s", log);
+		printf("program log:%s\n", log);
 		free(log);
 	}
 

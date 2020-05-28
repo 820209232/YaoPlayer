@@ -16,10 +16,10 @@ YaoGLShader::YaoGLShader(char* shaderStr, YaoGLShaderType type)
 
 	GLint logLen = 0;
 	glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &logLen);
-	if (logLen > 0) {
+	if (logLen > 1) {
 		char* log = (char*)malloc(logLen);
 		glGetShaderInfoLog(shader, logLen, NULL, log);
-		printf("%s \n", log);
+		printf("shader compile error:%s \n", log);
 		free(log);
 	}
 

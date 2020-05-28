@@ -1,5 +1,8 @@
 #include "YaoGL/YaoGL.h"
 
+#define STRINGIZE(x) #x
+#define SHADER(shader) "" STRINGIZE(shader)
+
 int main() {
 	glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -19,9 +22,32 @@ int main() {
 
     //初始化glad
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+    //顶点几个就执行几次，几乎同时执行 
+    char* vertexShaderStr = SHADER(
+        #version 330\n
+        layout(location = 0) in vec3 pos;
+        out vec3 outPos;
+        void main()
+        {
+            outPos = pos;
+            gl_Position = vec4(pos, 1.0);
+        }
+    );
 
-    char* vertexShaderStr = (char*)"int main() {}";
-    char* fragmentShaderStr = (char*)"int main() {}";
+    //光栅化之后，有多少像素，就执行几次
+    //outPos是每个像素经过插值之后的点
+    char* fragmentShaderStr = SHADER(
+        #version 330\n
+
+        out vec4 rgbaColor;
+        in vec3 outPos;
+        void main()
+        {
+            rgbaColor = vec4(outPos, 1.0);
+        }
+    );
+
+    //printf("vertexShaderStr:%s\n", vertexShaderStr);
 
     YaoGLProgram* program = new  YaoGLProgram(vertexShaderStr, fragmentShaderStr);
     
