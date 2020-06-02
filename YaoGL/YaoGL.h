@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <vector>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -26,7 +27,19 @@ class YaoGLProgram
 public:
 	YaoGLProgram(char* vertexShaderStr, char* fragmentShaderStr);
 	~YaoGLProgram();
+	int useProgram();
 private:
 	GLuint program = 0;
 };
 
+class YaoVAO
+{
+public:
+	YaoVAO();
+	~YaoVAO();
+	int addVertex3D(float* vertexs, int vertexCount, int layout);
+	int bindVAO();
+private:
+	GLuint vao = 0;
+	std::vector<GLuint> vboList;
+};

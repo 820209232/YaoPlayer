@@ -20,6 +20,13 @@ int main() {
     //不允许多个线程同时调用
     glfwMakeContextCurrent(window);
 
+    float vertexs[] =
+    {
+          0.0f,   1.0f,   0.0f,
+          -1.0f,  -1.0f,  0.0f,
+          1.0f,   -1.0f,  0.0f
+    };
+    
     //初始化glad
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
     //顶点几个就执行几次，几乎同时执行 
@@ -48,17 +55,26 @@ int main() {
     );
 
     //printf("vertexShaderStr:%s\n", vertexShaderStr);
+    
+    //VAO
+    YaoVAO * VAO = new YaoVAO();
+    VAO->addVertex3D(vertexs, 3, 0);
 
     YaoGLProgram* program = new  YaoGLProgram(vertexShaderStr, fragmentShaderStr);
     
 
     while (!glfwWindowShouldClose(window)) {
         //todo 绘制操作
+        glClear(GL_COLOR_BUFFER_BIT);
+        program->useProgram();
+        VAO->bindVAO();
+        glDrawArrays(GL_TRIANGLES, 0, 3);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
+    delete VAO;
     delete program;
     glfwTerminate();
     return 0;

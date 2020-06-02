@@ -22,6 +22,12 @@ YaoGLProgram::YaoGLProgram(char* vertexShaderStr, char* fragmentShaderStr)
 
 }
 
+int YaoGLProgram::useProgram()
+{
+	glUseProgram(program);
+	return 0;
+}
+
 YaoGLProgram::~YaoGLProgram()
 {
 	if (program != 0) {
