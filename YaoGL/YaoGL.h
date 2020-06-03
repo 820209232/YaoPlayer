@@ -39,7 +39,11 @@ public:
 	~YaoVAO();
 	int addVertex3D(float* vertexs, int vertexCount, int layout);
 	int bindVAO();
+	int setIndex(unsigned int * index, int indexCount);
+	int draw();
 private:
 	GLuint vao = 0;
+	GLuint ebo = 0;
 	std::vector<GLuint> vboList;
+	int indexCount = 0;
 };

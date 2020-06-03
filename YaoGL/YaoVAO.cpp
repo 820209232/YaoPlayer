@@ -12,6 +12,11 @@ YaoVAO::~YaoVAO()
 	}
 	vboList.clear();
 
+	if (ebo != NULL) {
+		glDeleteBuffers(1, &ebo);
+		ebo = NULL;
+	}
+
 	if (vao != NULL) {
 		glDeleteVertexArrays(1, &vao);
 		vao = NULL;
@@ -41,3 +46,25 @@ int YaoVAO::bindVAO()
 	glBindVertexArray(vao);
 	return 0;
 }
+
+int YaoVAO::setIndex(unsigned int * index, int _indexCount)
+{
+	glBindVertexArray(vao);
+	glGenBuffers(1, &ebo);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, _indexCount * sizeof(unsigned int), index, GL_STATIC_DRAW);
+
+	glBindVertexArray(0);
+	indexCount = _indexCount;
+
+	return 0;
+}
+
+int YaoVAO::draw()
+{
+	bindVAO();
+	glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, 0);
+	return 0;
+}
+
+
