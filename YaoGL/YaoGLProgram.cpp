@@ -35,3 +35,10 @@ YaoGLProgram::~YaoGLProgram()
 		program = 0;
 	}
 }
+
+int YaoGLProgram::setInt(const char* name, int value)
+{
+	glUniform1i(glGetUniformLocation(program, name), value);
+	return 0;
+}
+

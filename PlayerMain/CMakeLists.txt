@@ -15,6 +15,7 @@ target_link_libraries(PlayerMain YaoPlayer)
 target_link_libraries(PlayerMain YaoThread)
 target_link_libraries(PlayerMain YaoAV)
 target_link_libraries(PlayerMain YaoGL)
+target_link_libraries(PlayerMain YaoImg)
 
 target_link_libraries(PlayerMain avcodec)
 target_link_libraries(PlayerMain avformat)

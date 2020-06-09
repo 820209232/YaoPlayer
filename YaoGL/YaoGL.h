@@ -13,6 +13,22 @@ enum YaoGLShaderType
 	YAOGL_SHADER_FRAGMENT = 2
 };
 
+class YaoGLTexture {
+public:
+	YaoGLTexture();
+	~YaoGLTexture();
+	int loadImg(char* imgPath);
+	int createTexImage2D();
+	int bindTexture();
+
+private:
+	GLuint texture = 0;
+	unsigned char* imgData = nullptr;
+	int width = 0;
+	int height = 0;
+	int nrChannels = 0;
+};
+
 class YaoGLShader
 {
 public:
@@ -28,6 +44,7 @@ public:
 	YaoGLProgram(char* vertexShaderStr, char* fragmentShaderStr);
 	~YaoGLProgram();
 	int useProgram();
+	int setInt(const char* name, int value);
 private:
 	GLuint program = 0;
 };
@@ -40,10 +57,13 @@ public:
 	int addVertex3D(float* vertexs, int vertexCount, int layout);
 	int bindVAO();
 	int setIndex(unsigned int * index, int indexCount);
+	int bindTexture(char * imgPath);
 	int draw();
 private:
+	YaoGLTexture * yaoGlTexture = nullptr;
 	GLuint vao = 0;
 	GLuint ebo = 0;
 	std::vector<GLuint> vboList;
 	int indexCount = 0;
 };
+
