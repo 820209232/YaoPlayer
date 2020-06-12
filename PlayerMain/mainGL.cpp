@@ -27,14 +27,23 @@ int main() {
           -1.0f,  -1.0f,  0.0f,
           1.0f,   -1.0f,  0.0f
     };*/
-    //四边形
+    //四边形顶点位置坐标
     float vertexs[] =
     {
-        //     ---- 位置 ----    - 纹理坐标 -
-          1.0f,   1.0f,   0.0f,    1.0f,  1.0f,
-          -1.0f,  1.0f,  0.0f,     0.0f,  1.0f,
-          -1.0f,   -1.0f,  0.0f,   0.0f,  0.0f,
-          1.0f,   -1.0f,  0.0f,    1.0f,   0.0f
+        //     ---- 位置 ----
+          1.0f,   1.0f,   0.0f, 
+          -1.0f,  1.0f,  0.0f,
+          -1.0f,   -1.0f,  0.0f,
+          1.0f,   -1.0f,  0.0f,
+    };
+
+    //纹理坐标
+    float vertexsUV[] =
+    {
+          1.0f,  1.0f, 0.0f,
+          0.0f,  1.0f, 0.0f,
+          0.0f,  0.0f, 0.0f,
+          1.0f,   0.0f, 0.0f,
     };
 
     unsigned int index[] =
@@ -49,9 +58,9 @@ int main() {
     char* vertexShaderStr = SHADER(
         #version 330\n
         layout(location = 0) in vec3 pos;
-        layout(location = 1) in vec2 aTexCoord;
+        layout(location = 1) in vec3 aTexCoord;
         out vec3 outPos;
-        out vec2 TexCoord;
+        out vec3 TexCoord;
         void main()
         {
             outPos = pos;
@@ -67,12 +76,13 @@ int main() {
 
         out vec4 rgbaColor;
         in vec3 outPos;
-        in vec2 TexCoord;
+        in vec3 TexCoord;
 
-        uniform sampler2D texture;
+        uniform sampler2D t;
         void main()
         {
-            rgbaColor = texture(texture, TexCoord);
+            vec2 uv = vec2(TexCoord.x, TexCoord.y);
+            rgbaColor = texture(t, uv);
         }
     );
     //rgbaColor = vec4(outPos, 1.0);
@@ -81,14 +91,15 @@ int main() {
     //VAO
     YaoVAO * VAO = new YaoVAO();
     VAO->addVertex3D(vertexs, 4, 0);
+    VAO->addVertex3D(vertexsUV, 4, 1);
     VAO->setIndex(index, 6);
     VAO->bindTexture("1.jpg");
 
     YaoGLProgram* program = new  YaoGLProgram(vertexShaderStr, fragmentShaderStr);
     
-    /*program->useProgram();
-    program->setInt("texture", 0);
-    program->setInt("texture2", 1);*/
+    //program->useProgram();
+    //program->setInt("t", 0);  
+    //program->setInt("texture2", 1);
     while (!glfwWindowShouldClose(window)) {
         //todo 绘制操作
         glClear(GL_COLOR_BUFFER_BIT);
@@ -100,7 +111,7 @@ int main() {
         program->useProgram();
         VAO->draw();
 
-        glfwSwapBuffers(window);
+        glfwSwapBuffers(window); 
         glfwPollEvents();
     }
 

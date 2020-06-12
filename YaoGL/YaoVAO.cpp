@@ -36,12 +36,10 @@ int YaoVAO::addVertex3D(float * vertexs, int vertexCount, int layout)
 	GLuint VBO = 0;
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, vertexCount * 5 * sizeof(float), vertexs, GL_STATIC_DRAW);
-	glVertexAttribPointer(layout, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (GLvoid*)0);
+
+	glBufferData(GL_ARRAY_BUFFER, vertexCount * 3 * sizeof(float), vertexs, GL_STATIC_DRAW);
+	glVertexAttribPointer(layout, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (GLvoid*)0);
 	glEnableVertexAttribArray(layout);
-	//texture coord attribute
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (GLvoid*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
 	vboList.push_back(VBO);
 	//vao½â°ó
 	glBindVertexArray(0);
