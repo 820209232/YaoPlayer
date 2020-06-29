@@ -20,10 +20,13 @@ public:
 	int loadImg(char* imgPath);
 	int createTexImage2D();
 	int bindTexture();
+	int setImgData(unsigned char* _imgData);
+
+public:
+	unsigned char* imgData = nullptr;
 
 private:
 	GLuint texture = 0;
-	unsigned char* imgData = nullptr;
 	int width = 0;
 	int height = 0;
 	int nrChannels = 0;
@@ -58,6 +61,7 @@ public:
 	int bindVAO();
 	int setIndex(unsigned int * index, int indexCount);
 	int bindTexture(char * imgPath);
+	int bindTextureWidthData(unsigned char* imgData);
 	int draw();
 private:
 	YaoGLTexture * yaoGlTexture = nullptr;

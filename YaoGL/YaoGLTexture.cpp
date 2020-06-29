@@ -42,7 +42,7 @@ int YaoGLTexture::createTexImage2D()
 	//在生成纹理之后调用glGenerateMipmap。会为当前绑定的纹理自动生成所有需要的多级渐远纹理
 	glGenerateMipmap(GL_TEXTURE_2D);
 	//生成纹理后，释放图像的内存
-	stbi_image_free(imgData);
+	//stbi_image_free(imgData);
 
 	return 0;
 }
@@ -50,6 +50,19 @@ int YaoGLTexture::createTexImage2D()
 int YaoGLTexture::bindTexture()
 {
 	glBindTexture(GL_TEXTURE_2D, texture);
+	return 0;
+}
+
+int YaoGLTexture::setImgData(unsigned char* _imgData)
+{
+	/*for (int i = 0; i < 10; i++)
+	{
+		printf(" %d ", _imgData[i]);
+	}*/
+	int _strLen = 12 + 1;
+	printf("strLen:%d\n", _strLen);
+	imgData = (unsigned char *)malloc(_strLen);
+	memcpy(imgData, _imgData, _strLen);
 	return 0;
 }
 
